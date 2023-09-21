@@ -14,7 +14,7 @@ export class Order {
   @Column('float', { nullable: true })
   tax?: number;
 
-  @Column('datetime', { name: 'paid_at', nullable: true })
+  @Column('date', { name: 'paid_at', nullable: true })
   paidAt?: Date;
 
   @Column('float', { name: 'sub_total' })
