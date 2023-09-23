@@ -3,9 +3,16 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { Category } from '../../categories/entities/category.entity';
+import { Variant } from '../../variants/entities/variant.entity';
+import { Review } from '../../reviews/entities/review.entity';
+import { ItemInOrder } from '../../items-in-orders/entities/item-in-order.entity';
 
 @Entity('products')
 export class Product {
@@ -29,6 +36,18 @@ export class Product {
 
   @Column('text', { array: true, default: [] })
   images: string[];
+
+  @ManyToOne(() => Category, (category) => category.products)
+  category: Category;
+
+  @OneToMany(() => Variant, (variant) => variant.product)
+  variants: Variant[];
+
+  @OneToMany(() => Review, (reviews) => reviews.product)
+  reviews: Review[];
+
+  @OneToMany(() => ItemInOrder, (itemInOrder) => itemInOrder.product)
+  itemInOrder: ItemInOrder[];
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

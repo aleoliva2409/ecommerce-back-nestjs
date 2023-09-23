@@ -3,11 +3,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { Roles } from '../types/roles.enum';
+import { Order } from '../../orders/entities/order.entity';
+import { Review } from '../../reviews/entities/review.entity';
 
 @Entity('users')
 export class User {
@@ -28,6 +31,12 @@ export class User {
 
   @Column('enum', { enum: Roles, default: Roles.client })
   roles: Roles;
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
+
+  @OneToMany(() => Review, (reviews) => reviews.user)
+  reviews: Review[];
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

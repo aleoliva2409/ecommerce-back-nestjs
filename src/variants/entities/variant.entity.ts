@@ -3,9 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { Product } from '../../products/entities/product.entity';
 
 @Entity('variants')
 export class Variant {
@@ -23,6 +26,9 @@ export class Variant {
 
   @Column('text', { array: true })
   images: string[];
+
+  @ManyToOne(() => Product, (product) => product.variants)
+  product: Product;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

@@ -3,9 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { User } from '../../users/entities/user.entity';
+import { ItemInOrder } from '../../items-in-orders/entities/item-in-order.entity';
 
 @Entity('orders')
 export class Order {
@@ -29,6 +33,12 @@ export class Order {
 
   @Column('float')
   total: number;
+
+  @ManyToOne(() => User, (user) => user.orders)
+  user: User;
+
+  @ManyToOne(() => ItemInOrder, (itemInOrder) => itemInOrder.order)
+  itemInOrder: ItemInOrder;
 
   @Column('integer', { name: 'total_items' })
   totalItems: number;
