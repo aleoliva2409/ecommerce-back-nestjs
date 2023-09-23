@@ -21,4 +21,9 @@ export class Category {
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
+
+  // @BeforeInsert()
+  // capitalizeName() {
+  //   this.name = this.name[0].toUpperCase() + this.name.slice(1).toLocaleLowerCase();
+  // }
 }
