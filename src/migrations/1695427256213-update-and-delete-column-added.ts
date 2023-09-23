@@ -4,8 +4,6 @@ export class UpdateAndDeleteColumnAdded1695427256213 implements MigrationInterfa
     name = 'UpdateAndDeleteColumnAdded1695427256213'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "items_in_order" ADD "updated_at" TIMESTAMP NOT NULL DEFAULT now()`);
-        await queryRunner.query(`ALTER TABLE "items_in_order" ADD "deleted_at" TIMESTAMP`);
         await queryRunner.query(`ALTER TABLE "orders" ADD "updated_at" TIMESTAMP NOT NULL DEFAULT now()`);
         await queryRunner.query(`ALTER TABLE "orders" ADD "deleted_at" TIMESTAMP`);
         await queryRunner.query(`ALTER TABLE "users" ADD "updated_at" TIMESTAMP NOT NULL DEFAULT now()`);
@@ -25,8 +23,6 @@ export class UpdateAndDeleteColumnAdded1695427256213 implements MigrationInterfa
         await queryRunner.query(`ALTER TABLE "users" DROP COLUMN "updated_at"`);
         await queryRunner.query(`ALTER TABLE "orders" DROP COLUMN "deleted_at"`);
         await queryRunner.query(`ALTER TABLE "orders" DROP COLUMN "updated_at"`);
-        await queryRunner.query(`ALTER TABLE "items_in_order" DROP COLUMN "deleted_at"`);
-        await queryRunner.query(`ALTER TABLE "items_in_order" DROP COLUMN "updated_at"`);
     }
 
 }
