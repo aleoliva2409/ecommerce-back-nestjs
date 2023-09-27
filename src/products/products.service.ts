@@ -1,20 +1,47 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { CategoriesService } from 'src/categories/categories.service';
+import { VariantsService } from 'src/variants/variants.service';
+import { Product } from './entities/product.entity';
+import { CreateProductDto, UpdateProductDto } from './dto';
 
 @Injectable()
 export class ProductsService {
-  create(createProductDto: CreateProductDto) {
-    console.log(createProductDto);
-    return 'This action adds a new product';
+  constructor(
+    @InjectRepository(Product) private readonly productsRepository: Repository<Product>,
+    private readonly categoriesService: CategoriesService,
+    private readonly variantsService: VariantsService,
+  ) {}
+
+  async create(createProductDto: CreateProductDto): Promise<Product> {
+    const { categoryId, variant, ...rest } = createProductDto;
+
+    await this.categoriesService.findOne(categoryId);
+
+    const newProduct = this.productsRepository.create({
+      ...rest,
+      category: { id: categoryId },
+    });
+
+    await this.productsRepository.save(newProduct);
+    await this.variantsService.create({ ...variant, productId: newProduct.id });
+
+    //TODO revisar
+    return await this.findOne(newProduct.id);
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAll(): Promise<Product[]> {
+    return await this.productsRepository.find({
+      relations: { variants: true, category: true },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number): Promise<Product> {
+    const product = await this.productsRepository.findOneBy({ id });
+
+    return product;
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {

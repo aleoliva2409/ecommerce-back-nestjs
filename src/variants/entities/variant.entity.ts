@@ -25,7 +25,7 @@ export class Variant {
   color?: string;
 
   @Column('text', { array: true })
-  images: string[];
+  images?: string[] = [];
 
   @ManyToOne(() => Product, (product) => product.variants)
   product: Product;

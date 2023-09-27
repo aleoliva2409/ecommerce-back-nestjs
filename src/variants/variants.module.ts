@@ -9,5 +9,6 @@ import { Variant } from './entities/variant.entity';
   imports: [TypeOrmModule.forFeature([Variant])],
   controllers: [VariantsController],
   providers: [VariantsService],
+  exports: [VariantsService],
 })
 export class VariantsModule {}

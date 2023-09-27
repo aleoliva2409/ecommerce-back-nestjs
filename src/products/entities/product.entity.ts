@@ -10,9 +10,9 @@ import {
 } from 'typeorm';
 
 import { Category } from '../../categories/entities/category.entity';
-import { Variant } from '../../variants/entities/variant.entity';
-import { Review } from '../../reviews/entities/review.entity';
 import { ItemInOrder } from '../../items-in-orders/entities/item-in-order.entity';
+import { Review } from '../../reviews/entities/review.entity';
+import { Variant } from '../../variants/entities/variant.entity';
 
 @Entity('products')
 export class Product {
@@ -35,7 +35,7 @@ export class Product {
   tags?: string[];
 
   @Column('text', { array: true, default: [] })
-  images: string[];
+  images?: string[] = [];
 
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
