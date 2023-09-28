@@ -34,9 +34,6 @@ export class Product {
   @Column('varchar', { length: 15, array: true, default: [] })
   tags?: string[];
 
-  @Column('text', { array: true, default: [] })
-  images?: string[] = [];
-
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
 
