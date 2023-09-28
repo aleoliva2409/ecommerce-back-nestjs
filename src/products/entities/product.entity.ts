@@ -19,7 +19,7 @@ export class Product {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column('varchar', { length: 100 })
+  @Column('varchar', { length: 100, unique: true })
   title: string;
 
   @Column('text')
