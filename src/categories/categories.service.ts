@@ -1,14 +1,10 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
+import { capitalize, validateError } from 'src/shared';
 import { Category } from './entities/category.entity';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
-import { capitalize } from 'src/shared/helpers/capitalize';
 
 @Injectable()
 export class CategoriesService {
@@ -17,44 +13,56 @@ export class CategoriesService {
     private readonly categoriesRepository: Repository<Category>,
   ) {}
 
-  async create(createCategoryDto: CreateCategoryDto) {
-    const { name } = createCategoryDto;
-    return await this.categoriesRepository.save({ name: capitalize(name) });
+  async create(createCategoryDto: CreateCategoryDto): Promise<void> {
+    try {
+      const { name } = createCategoryDto;
+      await this.categoriesRepository.save({ name: capitalize(name) });
+    } catch (error) {
+      validateError(error);
+    }
   }
 
-  async findAll() {
-    return await this.categoriesRepository.find({ order: { id: 'asc' } });
+  async findAll(): Promise<Category[]> {
+    try {
+      return await this.categoriesRepository.find({ order: { id: 'asc' } });
+    } catch (error) {
+      validateError(error);
+    }
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Category> {
     try {
       const category = await this.categoriesRepository.findOneBy({ id });
 
       if (!category) {
-        throw new NotFoundException();
+        throw new NotFoundException(`Cannot find category with id ${id}`);
       }
 
       return category;
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw new NotFoundException(`Cannot find category with id ${id}`);
-      }
-
-      throw new InternalServerErrorException();
+      validateError(error);
     }
   }
 
-  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    const { name } = updateCategoryDto;
+  async update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<UpdateResult> {
+    try {
+      const { name } = updateCategoryDto;
 
-    await this.findOne(id);
+      await this.findOne(id);
 
-    return await this.categoriesRepository.update(id, { name: capitalize(name) });
+      return await this.categoriesRepository.update(id, { name: capitalize(name) });
+    } catch (error) {
+      validateError(error);
+    }
   }
 
-  async remove(id: number) {
-    await this.findOne(id);
+  async remove(id: number): Promise<DeleteResult> {
+    try {
+      await this.findOne(id);
 
-    return await this.categoriesRepository.delete(id);
+      return await this.categoriesRepository.delete(id);
+    } catch (error) {
+      validateError(error);
+    }
   }
 }
