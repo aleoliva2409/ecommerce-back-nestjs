@@ -1,12 +1,15 @@
-import { IsNumber, IsOptional, IsPositive, IsString, Min } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+
+import { Product } from 'src/products/entities/product.entity';
 
 export class CreateVariantDto {
   @IsString()
+  @IsNotEmpty()
   size: string; // enum
 
   @IsNumber()
   @Min(0)
-  @IsPositive()
+  @IsNotEmpty()
   stock: number;
 
   @IsString()
@@ -16,5 +19,6 @@ export class CreateVariantDto {
   // images: string[];
 
   @IsNumber()
-  productId: number;
+  @IsNotEmpty()
+  product: Product;
 }
