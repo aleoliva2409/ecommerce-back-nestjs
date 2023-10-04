@@ -34,14 +34,14 @@ export class Order {
   @Column('float')
   total: number;
 
+  @Column('integer', { name: 'total_items' })
+  totalItems: number;
+
   @ManyToOne(() => User, (user) => user.orders)
   user: User;
 
   @ManyToOne(() => ItemInOrder, (itemInOrder) => itemInOrder.order)
   itemInOrder: ItemInOrder;
-
-  @Column('integer', { name: 'total_items' })
-  totalItems: number;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
