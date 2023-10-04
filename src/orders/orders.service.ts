@@ -37,7 +37,7 @@ export class OrdersService {
   async findAll(): Promise<Order[]> {
     try {
       return await this.ordersRepository.find({
-        relations: { itemInOrder: true },
+        relations: { itemInOrder: { product: true } },
         order: { id: 'asc' },
       });
     } catch (error) {
@@ -49,7 +49,7 @@ export class OrdersService {
     try {
       const order = await this.ordersRepository.findOne({
         where: { id },
-        relations: { itemInOrder: true },
+        relations: { itemInOrder: { product: true } },
       });
 
       if (!order) {

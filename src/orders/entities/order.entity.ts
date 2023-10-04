@@ -4,6 +4,7 @@ import {
   DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -40,8 +41,8 @@ export class Order {
   @ManyToOne(() => User, (user) => user.orders)
   user: User;
 
-  @ManyToOne(() => ItemInOrder, (itemInOrder) => itemInOrder.order)
-  itemInOrder: ItemInOrder;
+  @OneToMany(() => ItemInOrder, (itemInOrder) => itemInOrder.order)
+  itemInOrder: ItemInOrder[];
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

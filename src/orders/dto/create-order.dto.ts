@@ -3,9 +3,9 @@ import {
   IsBoolean,
   IsDate,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
-  Length,
   Min,
 } from 'class-validator';
 
@@ -38,6 +38,6 @@ export class CreateOrderDto {
   totalItems: number;
 
   @IsArray()
-  @Length(1)
+  @IsObject({ each: true }) //* revisa que cada posicion del array sea un objeto
   products: any[];
 }
