@@ -19,12 +19,6 @@ export class ItemInOrder {
   @Column('integer')
   quantity: number;
 
-  @Column()
-  orderId: number;
-
-  @Column()
-  productId: number;
-
   @ManyToOne(() => Product, (product) => product.itemInOrder)
   product: Product;
 

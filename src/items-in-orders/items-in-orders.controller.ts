@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+} from '@nestjs/common';
+
 import { ItemsInOrdersService } from './items-in-orders.service';
-import { CreateItemsInOrderDto } from './dto/create-items-in-order.dto';
-import { UpdateItemsInOrderDto } from './dto/update-items-in-order.dto';
+import { CreateItemsInOrderDto, UpdateItemsInOrderDto } from './dto';
 
 @Controller('items-in-orders')
 export class ItemsInOrdersController {
@@ -18,17 +27,20 @@ export class ItemsInOrdersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.itemsInOrdersService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.itemsInOrdersService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateItemsInOrderDto: UpdateItemsInOrderDto) {
-    return this.itemsInOrdersService.update(+id, updateItemsInOrderDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateItemsInOrderDto: UpdateItemsInOrderDto,
+  ) {
+    return this.itemsInOrdersService.update(id, updateItemsInOrderDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.itemsInOrdersService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.itemsInOrdersService.remove(id);
   }
 }
