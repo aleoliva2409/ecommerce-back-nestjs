@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsNumber, Min } from 'class-validator';
 
-import { Order } from 'src/orders/entities/order.entity';
+import { Order } from '../entities';
 import { Product } from 'src/products/entities/product.entity';
 
-export class CreateItemsInOrderDto {
+export class AddItemInOrderDto {
   @IsNumber()
   @Min(1)
   @IsNotEmpty()

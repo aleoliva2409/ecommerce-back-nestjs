@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 import { User } from '../../users/entities/user.entity';
-import { ItemInOrder } from '../../items-in-orders/entities/item-in-order.entity';
+import { ItemInOrder } from './item-in-order.entity';
 
 @Entity('orders')
 export class Order {

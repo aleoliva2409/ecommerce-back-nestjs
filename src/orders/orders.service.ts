@@ -3,16 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 import { validateError } from 'src/shared';
-import { ItemsInOrdersService } from 'src/items-in-orders/items-in-orders.service';
-import { Order } from './entities/order.entity';
-import { CreateOrderDto, UpdateOrderDto } from './dto';
+import { ItemInOrder, Order } from './entities';
+import { AddItemInOrderDto, CreateOrderDto, UpdateOrderDto } from './dto';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectRepository(Order)
     private readonly ordersRepository: Repository<Order>,
-    private readonly itemsInOrdersService: ItemsInOrdersService,
+    @InjectRepository(ItemInOrder)
+    private readonly itemsInOrdersRepository: Repository<ItemInOrder>,
   ) {}
 
   async create(createOrderDto: CreateOrderDto): Promise<void> {
@@ -23,12 +23,22 @@ export class OrdersService {
       await this.ordersRepository.save(order);
 
       products.forEach(async (product: any) => {
-        await this.itemsInOrdersService.create({
+        await this.addItemInOrder({
           product: product.id,
           order: order,
           quantity: product.quantity,
         });
       });
+    } catch (error) {
+      validateError(error);
+    }
+  }
+
+  async addItemInOrder(addItemInOrderDto: AddItemInOrderDto): Promise<void> {
+    try {
+      const itemInOrder = this.itemsInOrdersRepository.create(addItemInOrderDto);
+
+      await this.itemsInOrdersRepository.save(itemInOrder);
     } catch (error) {
       validateError(error);
     }
