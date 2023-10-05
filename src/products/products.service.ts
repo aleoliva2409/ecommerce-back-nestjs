@@ -3,20 +3,24 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 import { CategoriesService } from 'src/categories/categories.service';
-import { VariantsService } from 'src/variants/variants.service';
 import { validateError } from 'src/shared';
-import { Product } from './entities/product.entity';
-import { CreateProductDto, UpdateProductDto } from './dto';
+import { Product, Variant } from './entities';
+import {
+  CreateProductDto,
+  CreateVariantDto,
+  UpdateProductDto,
+  UpdateVariantDto,
+} from './dto';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private readonly productsRepository: Repository<Product>,
+    @InjectRepository(Variant) private readonly variantsRepository: Repository<Variant>,
     private readonly categoriesService: CategoriesService,
-    private readonly variantsService: VariantsService,
   ) {}
 
-  async create(createProductDto: CreateProductDto): Promise<void> {
+  async createProduct(createProductDto: CreateProductDto): Promise<void> {
     try {
       const { variant, ...rest } = createProductDto;
 
@@ -26,7 +30,21 @@ export class ProductsService {
       const newProduct = this.productsRepository.create({ ...rest });
 
       await this.productsRepository.save(newProduct);
-      await this.variantsService.create({ ...variant, product: newProduct });
+      await this.createVariant(newProduct.id, variant);
+    } catch (error) {
+      validateError(error);
+    }
+  }
+
+  async createVariant(
+    productId: number,
+    createVariantDto: CreateVariantDto,
+  ): Promise<void> {
+    try {
+      const product = await this.findProduct(productId);
+      const newVariant = this.variantsRepository.create({ ...createVariantDto, product });
+
+      await this.variantsRepository.save(newVariant);
     } catch (error) {
       validateError(error);
     }
@@ -43,15 +61,15 @@ export class ProductsService {
     }
   }
 
-  async findOne(id: number): Promise<Product> {
+  async findProduct(productId: number): Promise<Product> {
     try {
       const product = await this.productsRepository.findOne({
-        where: { id },
+        where: { id: productId },
         relations: { variants: true, category: true },
       });
 
       if (!product) {
-        throw new NotFoundException(`Cannot find product with id ${id}`);
+        throw new NotFoundException(`Cannot find product with id ${productId}`);
       }
 
       return product;
@@ -60,21 +78,53 @@ export class ProductsService {
     }
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto): Promise<UpdateResult> {
+  async updateProduct(
+    productId: number,
+    updateProductDto: UpdateProductDto,
+  ): Promise<UpdateResult> {
     try {
-      await this.findOne(id);
+      await this.findProduct(productId);
+      const { category } = updateProductDto;
 
-      return await this.productsRepository.update(id, { ...updateProductDto });
+      if (!!category) {
+        await this.categoriesService.findOne(category as any);
+      }
+
+      return await this.productsRepository.update(productId, { ...updateProductDto });
     } catch (error) {
       validateError(error);
     }
   }
 
-  async remove(id: number): Promise<DeleteResult> {
+  async updateVariant(
+    productId: number,
+    variantId: number,
+    updateVariantDto: UpdateVariantDto,
+  ): Promise<UpdateResult> {
     try {
-      await this.findOne(id);
+      await this.findProduct(productId);
 
-      return await this.productsRepository.softDelete(id);
+      return await this.variantsRepository.update(variantId, { ...updateVariantDto });
+    } catch (error) {
+      validateError(error);
+    }
+  }
+
+  async removeProduct(productId: number): Promise<DeleteResult> {
+    try {
+      await this.findProduct(productId);
+
+      return await this.productsRepository.softDelete(productId);
+    } catch (error) {
+      validateError(error);
+    }
+  }
+
+  async removeVariant(productId: number, variantId: number): Promise<DeleteResult> {
+    try {
+      await this.findProduct(productId);
+
+      return await this.variantsRepository.softDelete(variantId);
     } catch (error) {
       validateError(error);
     }

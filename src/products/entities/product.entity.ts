@@ -12,7 +12,7 @@ import {
 import { Category } from '../../categories/entities/category.entity';
 import { ItemInOrder } from '../../items-in-orders/entities/item-in-order.entity';
 import { Review } from '../../reviews/entities/review.entity';
-import { Variant } from '../../variants/entities/variant.entity';
+import { Variant } from './variant.entity';
 
 @Entity('products')
 export class Product {
@@ -37,10 +37,10 @@ export class Product {
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
 
-  @OneToMany(() => Variant, (variant) => variant.product)
+  @OneToMany(() => Variant, (variant) => variant.product, { cascade: ['soft-remove'] })
   variants: Variant[];
 
-  @OneToMany(() => Review, (reviews) => reviews.product)
+  @OneToMany(() => Review, (reviews) => reviews.product, { cascade: ['soft-remove'] })
   reviews: Review[];
 
   @OneToMany(() => ItemInOrder, (itemInOrder) => itemInOrder.product)

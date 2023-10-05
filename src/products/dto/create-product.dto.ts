@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 
 import { Category } from 'src/categories/entities/category.entity';
-import { CreateVariantDto } from 'src/variants/dto/create-variant.dto';
+import { CreateVariantDto } from './create-variant.dto';
 
 export class CreateProductDto {
   @IsString()

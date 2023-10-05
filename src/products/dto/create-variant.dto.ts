@@ -1,7 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
-import { Product } from 'src/products/entities/product.entity';
-
 export class CreateVariantDto {
   @IsString()
   @IsNotEmpty()
@@ -17,8 +15,4 @@ export class CreateVariantDto {
   color?: string = null;
 
   // images: string[];
-
-  @IsNumber()
-  @IsNotEmpty()
-  product: Product;
 }
