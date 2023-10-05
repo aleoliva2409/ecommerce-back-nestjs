@@ -112,7 +112,11 @@ export class ProductsService {
 
   async removeProduct(productId: number): Promise<DeleteResult> {
     try {
-      await this.findProduct(productId);
+      const product = await this.findProduct(productId);
+
+      product.variants.forEach(async (variant) => {
+        await this.variantsRepository.softDelete(variant.id);
+      });
 
       return await this.productsRepository.softDelete(productId);
     } catch (error) {

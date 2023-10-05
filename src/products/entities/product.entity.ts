@@ -37,10 +37,10 @@ export class Product {
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
 
-  @OneToMany(() => Variant, (variant) => variant.product, { cascade: ['soft-remove'] })
+  @OneToMany(() => Variant, (variant) => variant.product)
   variants: Variant[];
 
-  @OneToMany(() => Review, (reviews) => reviews.product, { cascade: ['soft-remove'] })
+  @OneToMany(() => Review, (reviews) => reviews.product)
   reviews: Review[];
 
   @OneToMany(() => ItemInOrder, (itemInOrder) => itemInOrder.product)
