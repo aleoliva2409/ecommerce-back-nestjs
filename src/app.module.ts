@@ -6,7 +6,6 @@ import { dataSourceOptions } from './config/data-source';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { FavoritesModule } from './favorites/favorites.module';
-import { ItemsInOrdersModule } from './items-in-orders/items-in-orders.module';
 import { OrdersModule } from './orders/orders.module';
 import { ProductsModule } from './products/products.module';
 import { ReviewsModule } from './reviews/reviews.module';
@@ -19,7 +18,6 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     CategoriesModule,
     FavoritesModule,
-    ItemsInOrdersModule,
     OrdersModule,
     ProductsModule,
     ReviewsModule,
