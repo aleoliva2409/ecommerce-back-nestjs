@@ -11,7 +11,7 @@ import {
 import { Order } from './order.entity';
 import { Variant } from '../../products/entities';
 
-@Entity('items_in_orders')
+@Entity('variants_in_orders')
 export class ItemInOrder {
   @PrimaryGeneratedColumn('increment')
   id: number;
