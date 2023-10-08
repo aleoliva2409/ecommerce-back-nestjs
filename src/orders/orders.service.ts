@@ -15,18 +15,18 @@ export class OrdersService {
     private readonly itemsInOrdersRepository: Repository<VariantInOrder>,
   ) {}
 
-  async create(createOrderDto: CreateOrderDto): Promise<void> {
+  async createOrder(createOrderDto: CreateOrderDto): Promise<void> {
     try {
-      const { products, ...rest } = createOrderDto;
+      const { variants, ...rest } = createOrderDto;
       const order = this.ordersRepository.create({ ...rest });
 
       await this.ordersRepository.save(order);
 
-      products.forEach(async (product: any) => {
+      variants.forEach(async (variant: any) => {
         await this.addVariantInOrder({
-          product: product.id,
+          variant: variant.id,
           order: order,
-          quantity: product.quantity,
+          quantity: variant.quantity,
         });
       });
     } catch (error) {
@@ -44,10 +44,12 @@ export class OrdersService {
     }
   }
 
-  async findAll(): Promise<Order[]> {
+  async getOrders(): Promise<Order[]> {
     try {
       return await this.ordersRepository.find({
-        relations: { variantInOrder: { variant: { product: true } } },
+        relations: {
+          variantInOrder: { variant: { product: true, color: true, size: true } },
+        },
         order: { id: 'asc' },
       });
     } catch (error) {
@@ -55,11 +57,13 @@ export class OrdersService {
     }
   }
 
-  async findOne(id: number): Promise<Order> {
+  async getOrder(id: number): Promise<Order> {
     try {
       const order = await this.ordersRepository.findOne({
         where: { id },
-        relations: { variantInOrder: { variant: { product: true } } },
+        relations: {
+          variantInOrder: { variant: { product: true, color: true, size: true } },
+        },
       });
 
       if (!order) {
@@ -72,9 +76,9 @@ export class OrdersService {
     }
   }
 
-  async update(id: number, updateOrderDto: UpdateOrderDto): Promise<UpdateResult> {
+  async updateOrder(id: number, updateOrderDto: UpdateOrderDto): Promise<UpdateResult> {
     try {
-      await this.findOne(id);
+      await this.getOrder(id);
 
       return await this.ordersRepository.update(id, { ...updateOrderDto });
     } catch (error) {
@@ -82,9 +86,9 @@ export class OrdersService {
     }
   }
 
-  async remove(id: number): Promise<DeleteResult> {
+  async removeOrder(id: number): Promise<DeleteResult> {
     try {
-      await this.findOne(id);
+      await this.getOrder(id);
 
       return await this.ordersRepository.softDelete(id);
     } catch (error) {

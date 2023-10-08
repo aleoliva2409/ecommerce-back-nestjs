@@ -16,5 +16,6 @@ export class UpdateVariantDto {
   @IsOptional()
   color?: Color;
 
+  //TODO: agregar imagenes
   // images: string[];
 }

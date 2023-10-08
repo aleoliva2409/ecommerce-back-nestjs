@@ -18,26 +18,26 @@ export class OrdersController {
 
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
-    return this.ordersService.create(createOrderDto);
+    return this.ordersService.createOrder(createOrderDto);
   }
 
   @Get()
   findAll() {
-    return this.ordersService.findAll();
+    return this.ordersService.getOrders();
   }
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.ordersService.findOne(id);
+    return this.ordersService.getOrder(id);
   }
 
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.ordersService.update(id, updateOrderDto);
+    return this.ordersService.updateOrder(id, updateOrderDto);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
-    return this.ordersService.remove(id);
+    return this.ordersService.removeOrder(id);
   }
 }

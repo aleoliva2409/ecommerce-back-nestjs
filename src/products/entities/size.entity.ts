@@ -8,7 +8,7 @@ export class Size {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column('varchar', { length: 10, unique: true })
+  @Column('varchar', { length: 5, unique: true })
   name: string;
 
   @Column('enum', { enum: SizeType })

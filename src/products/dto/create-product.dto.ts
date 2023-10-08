@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  Length,
   MinLength,
 } from 'class-validator';
 
@@ -16,7 +17,7 @@ import { SizeType } from '../types/size-type.enum';
 
 export class CreateProductDto {
   @IsString()
-  @MinLength(4)
+  @Length(4, 100)
   @IsNotEmpty()
   title: string;
 
@@ -26,6 +27,7 @@ export class CreateProductDto {
   description: string;
 
   @IsString()
+  @Length(0, 30)
   @IsOptional()
   brand?: string = null;
 

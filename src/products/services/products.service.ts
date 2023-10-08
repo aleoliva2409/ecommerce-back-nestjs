@@ -41,7 +41,7 @@ export class ProductsService {
     createVariantDto: CreateVariantDto,
   ): Promise<void> {
     try {
-      const product = await this.findProduct(productId);
+      const product = await this.getProduct(productId);
       const newVariant = this.variantsRepository.create({ ...createVariantDto, product });
 
       await this.variantsRepository.save(newVariant);
@@ -50,10 +50,10 @@ export class ProductsService {
     }
   }
 
-  async findAll(): Promise<Product[]> {
+  async getProducts(): Promise<Product[]> {
     try {
       return await this.productsRepository.find({
-        relations: { variants: true, category: true },
+        relations: { variants: { size: true, color: true }, category: true },
         order: { id: 'asc' },
       });
     } catch (error) {
@@ -61,11 +61,11 @@ export class ProductsService {
     }
   }
 
-  async findProduct(productId: number): Promise<Product> {
+  async getProduct(productId: number): Promise<Product> {
     try {
       const product = await this.productsRepository.findOne({
         where: { id: productId },
-        relations: { variants: true, category: true },
+        relations: { variants: { size: true, color: true }, category: true },
       });
 
       if (!product) {
@@ -78,12 +78,26 @@ export class ProductsService {
     }
   }
 
+  async getVariant(variantId: number): Promise<Variant> {
+    try {
+      const variant = await this.variantsRepository.findOneBy({ id: variantId });
+
+      if (!variant) {
+        throw new NotFoundException(`Variant ${variantId} not found`);
+      }
+
+      return variant;
+    } catch (error) {
+      validateError(error);
+    }
+  }
+
   async updateProduct(
     productId: number,
     updateProductDto: UpdateProductDto,
   ): Promise<UpdateResult> {
     try {
-      await this.findProduct(productId);
+      await this.getProduct(productId);
       const { category } = updateProductDto;
 
       if (!!category) {
@@ -102,7 +116,8 @@ export class ProductsService {
     updateVariantDto: UpdateVariantDto,
   ): Promise<UpdateResult> {
     try {
-      await this.findProduct(productId);
+      await this.getProduct(productId);
+      await this.getVariant(variantId);
 
       return await this.variantsRepository.update(variantId, { ...updateVariantDto });
     } catch (error) {
@@ -112,11 +127,7 @@ export class ProductsService {
 
   async removeProduct(productId: number): Promise<DeleteResult> {
     try {
-      const product = await this.findProduct(productId);
-
-      product.variants.forEach(async (variant) => {
-        await this.variantsRepository.softDelete(variant.id);
-      });
+      await this.getProduct(productId);
 
       return await this.productsRepository.softDelete(productId);
     } catch (error) {
@@ -126,7 +137,8 @@ export class ProductsService {
 
   async removeVariant(productId: number, variantId: number): Promise<DeleteResult> {
     try {
-      await this.findProduct(productId);
+      await this.getProduct(productId);
+      await this.getVariant(variantId);
 
       return await this.variantsRepository.softDelete(variantId);
     } catch (error) {

@@ -1,10 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Product } from '../../products/entities/product.entity';
 
@@ -18,9 +12,6 @@ export class Category {
 
   @OneToMany(() => Product, (products) => products.category)
   products: Product[];
-
-  @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
 
   // @BeforeInsert()
   // capitalizeName() {

@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsNumber, Min } from 'class-validator';
 
 import { Order } from '../entities';
-import { Product } from 'src/products/entities/product.entity';
+import { Variant } from 'src/products/entities';
 
 export class AddVariantInOrderDto {
   @IsNumber()
@@ -12,7 +12,7 @@ export class AddVariantInOrderDto {
   @IsNumber()
   @Min(0)
   @IsNotEmpty()
-  product: Product;
+  variant: Variant;
 
   @IsNumber()
   @Min(0)

@@ -31,7 +31,7 @@ export class Variant {
   @ManyToOne(() => Size, (size) => size.variants)
   size: Size;
 
-  @ManyToOne(() => Color, (color) => color.variants, { nullable: true })
+  @ManyToOne(() => Color, (color) => color.variants)
   color?: Color;
 
   @ManyToOne(() => Product, (product) => product.variants)

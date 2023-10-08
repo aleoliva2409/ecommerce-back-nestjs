@@ -39,5 +39,5 @@ export class CreateOrderDto {
 
   @IsArray()
   @IsObject({ each: true }) //* revisa que cada posicion del array sea un objeto
-  products: any[];
+  variants: any[];
 }

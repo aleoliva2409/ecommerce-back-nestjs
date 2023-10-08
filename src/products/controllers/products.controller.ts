@@ -35,13 +35,13 @@ export class ProductsController {
   }
 
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  getProducts() {
+    return this.productsService.getProducts();
   }
 
   @Get(':productId')
-  findProduct(@Param('productId', ParseIntPipe) productId: number) {
-    return this.productsService.findProduct(productId);
+  getProduct(@Param('productId', ParseIntPipe) productId: number) {
+    return this.productsService.getProduct(productId);
   }
 
   @Patch(':productId')
