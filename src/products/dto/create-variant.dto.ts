@@ -1,18 +1,20 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, Min } from 'class-validator';
+
+import { Color, Size } from '../entities';
 
 export class CreateVariantDto {
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  size: string; // enum
+  size: Size;
 
   @IsNumber()
   @Min(0)
   @IsNotEmpty()
   stock: number;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  color?: string = null;
+  color?: Color = null;
 
   // images: string[];
 }

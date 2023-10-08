@@ -13,6 +13,7 @@ import { Category } from '../../categories/entities/category.entity';
 import { ItemInOrder } from '../../orders/entities';
 import { Review } from '../../reviews/entities/review.entity';
 import { Variant } from './variant.entity';
+import { SizeType } from '../types/size-type.enum';
 
 @Entity('products')
 export class Product {
@@ -33,6 +34,9 @@ export class Product {
 
   @Column('varchar', { length: 15, array: true, default: [] })
   tags?: string[];
+
+  @Column('enum', { enum: SizeType, name: 'size_type' })
+  sizeType: SizeType;
 
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;

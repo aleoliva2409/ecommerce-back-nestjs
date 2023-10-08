@@ -1,5 +1,6 @@
 import {
   IsArray,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsObject,
@@ -11,6 +12,7 @@ import {
 
 import { Category } from 'src/categories/entities/category.entity';
 import { CreateVariantDto } from './create-variant.dto';
+import { SizeType } from '../types/size-type.enum';
 
 export class CreateProductDto {
   @IsString()
@@ -35,6 +37,10 @@ export class CreateProductDto {
   @IsArray()
   @IsOptional()
   tags?: string[] = [];
+
+  @IsEnum(SizeType)
+  @IsString()
+  sizeType: SizeType;
 
   //** al mandarle el nro del ID hace la relacion directamente
   @IsNumber()

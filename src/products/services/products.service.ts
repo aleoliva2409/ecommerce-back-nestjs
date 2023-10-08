@@ -4,13 +4,13 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 import { CategoriesService } from 'src/categories/categories.service';
 import { validateError } from 'src/shared';
-import { Product, Variant } from './entities';
+import { Product, Variant } from '../entities';
 import {
   CreateProductDto,
   CreateVariantDto,
   UpdateProductDto,
   UpdateVariantDto,
-} from './dto';
+} from '../dto';
 
 @Injectable()
 export class ProductsService {

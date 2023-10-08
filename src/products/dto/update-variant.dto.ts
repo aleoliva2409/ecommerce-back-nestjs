@@ -1,18 +1,20 @@
-import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsNumber, IsOptional, Min } from 'class-validator';
+
+import { Color, Size } from '../entities';
 
 export class UpdateVariantDto {
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  size?: string; // enum
+  size?: Size;
 
   @IsNumber()
   @Min(0)
   @IsOptional()
   stock?: number;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  color?: string;
+  color?: Color;
 
   // images: string[];
 }

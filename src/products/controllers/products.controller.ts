@@ -9,13 +9,13 @@ import {
   Post,
 } from '@nestjs/common';
 
-import { ProductsService } from './products.service';
+import { ProductsService } from '../services';
 import {
   CreateProductDto,
   CreateVariantDto,
   UpdateProductDto,
   UpdateVariantDto,
-} from './dto';
+} from '../dto';
 
 @Controller('products')
 export class ProductsController {

@@ -9,23 +9,25 @@ import {
 } from 'typeorm';
 
 import { Product } from './product.entity';
+import { Size } from './size.entity';
+import { Color } from './color.entity';
 
 @Entity('variants')
 export class Variant {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column('varchar', { length: 5 }) // enum
-  size: string;
-
   @Column('integer')
   stock: number;
 
-  @Column('varchar', { length: 20, nullable: true }) // enum
-  color?: string;
-
   @Column('text', { array: true })
   images?: string[] = [];
+
+  @ManyToOne(() => Size, (size) => size.variants)
+  size: Size;
+
+  @ManyToOne(() => Color, (color) => color.variants, { nullable: true })
+  color?: Color;
 
   @ManyToOne(() => Product, (product) => product.variants)
   product: Product;
