@@ -12,7 +12,7 @@ import {
 import { Product } from './product.entity';
 import { Size } from './size.entity';
 import { Color } from './color.entity';
-import { ItemInOrder } from '../../orders/entities';
+import { VariantInOrder } from '../../orders/entities';
 
 @Entity('variants')
 export class Variant {
@@ -25,8 +25,8 @@ export class Variant {
   @Column('text', { array: true })
   images?: string[] = [];
 
-  @OneToMany(() => ItemInOrder, (itemInOrder) => itemInOrder.variant)
-  itemInOrder: ItemInOrder[];
+  @OneToMany(() => VariantInOrder, (variantInOrder) => variantInOrder.variant)
+  variantInOrder: VariantInOrder[];
 
   @ManyToOne(() => Size, (size) => size.variants)
   size: Size;

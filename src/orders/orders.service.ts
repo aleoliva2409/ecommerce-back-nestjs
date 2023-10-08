@@ -3,16 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 import { validateError } from 'src/shared';
-import { ItemInOrder, Order } from './entities';
-import { AddItemInOrderDto, CreateOrderDto, UpdateOrderDto } from './dto';
+import { VariantInOrder, Order } from './entities';
+import { AddVariantInOrderDto, CreateOrderDto, UpdateOrderDto } from './dto';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectRepository(Order)
     private readonly ordersRepository: Repository<Order>,
-    @InjectRepository(ItemInOrder)
-    private readonly itemsInOrdersRepository: Repository<ItemInOrder>,
+    @InjectRepository(VariantInOrder)
+    private readonly itemsInOrdersRepository: Repository<VariantInOrder>,
   ) {}
 
   async create(createOrderDto: CreateOrderDto): Promise<void> {
@@ -23,7 +23,7 @@ export class OrdersService {
       await this.ordersRepository.save(order);
 
       products.forEach(async (product: any) => {
-        await this.addItemInOrder({
+        await this.addVariantInOrder({
           product: product.id,
           order: order,
           quantity: product.quantity,
@@ -34,11 +34,11 @@ export class OrdersService {
     }
   }
 
-  async addItemInOrder(addItemInOrderDto: AddItemInOrderDto): Promise<void> {
+  async addVariantInOrder(addVariantInOrderDto: AddVariantInOrderDto): Promise<void> {
     try {
-      const itemInOrder = this.itemsInOrdersRepository.create(addItemInOrderDto);
+      const variantInOrder = this.itemsInOrdersRepository.create(addVariantInOrderDto);
 
-      await this.itemsInOrdersRepository.save(itemInOrder);
+      await this.itemsInOrdersRepository.save(variantInOrder);
     } catch (error) {
       validateError(error);
     }
@@ -47,7 +47,7 @@ export class OrdersService {
   async findAll(): Promise<Order[]> {
     try {
       return await this.ordersRepository.find({
-        relations: { itemInOrder: { variant: { product: true } } },
+        relations: { variantInOrder: { variant: { product: true } } },
         order: { id: 'asc' },
       });
     } catch (error) {
@@ -59,7 +59,7 @@ export class OrdersService {
     try {
       const order = await this.ordersRepository.findOne({
         where: { id },
-        relations: { itemInOrder: { variant: { product: true } } },
+        relations: { variantInOrder: { variant: { product: true } } },
       });
 
       if (!order) {

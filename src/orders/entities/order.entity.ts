@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 import { User } from '../../users/entities/user.entity';
-import { ItemInOrder } from './item-in-order.entity';
+import { VariantInOrder } from './variant-in-order.entity';
 
 @Entity('orders')
 export class Order {
@@ -41,8 +41,8 @@ export class Order {
   @ManyToOne(() => User, (user) => user.orders)
   user: User;
 
-  @OneToMany(() => ItemInOrder, (itemInOrder) => itemInOrder.order)
-  itemInOrder: ItemInOrder[];
+  @OneToMany(() => VariantInOrder, (variantInOrder) => variantInOrder.order)
+  variantInOrder: VariantInOrder[];
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

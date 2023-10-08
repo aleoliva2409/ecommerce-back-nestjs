@@ -12,17 +12,17 @@ import { Order } from './order.entity';
 import { Variant } from '../../products/entities';
 
 @Entity('variants_in_orders')
-export class ItemInOrder {
+export class VariantInOrder {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column('integer')
   quantity: number;
 
-  @ManyToOne(() => Variant, (variant) => variant.itemInOrder)
+  @ManyToOne(() => Variant, (variant) => variant.variantInOrder)
   variant: Variant;
 
-  @ManyToOne(() => Order, (order) => order.itemInOrder)
+  @ManyToOne(() => Order, (order) => order.variantInOrder)
   order: Order;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })

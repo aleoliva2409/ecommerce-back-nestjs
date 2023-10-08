@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class RelationItemInOrderModified1696383553418 implements MigrationInterface {
-    name = 'RelationItemInOrderModified1696383553418'
+export class RelationVariantInOrderModified1696383553418 implements MigrationInterface {
+    name = 'RelationVariantInOrderModified1696383553418'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "orders" DROP CONSTRAINT "FK_0004559970b4fbea4655f992ec5"`);
