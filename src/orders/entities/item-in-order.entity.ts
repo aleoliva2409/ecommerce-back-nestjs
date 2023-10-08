@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 import { Order } from './order.entity';
-import { Product } from '../../products/entities/product.entity';
+import { Variant } from '../../products/entities';
 
 @Entity('items_in_orders')
 export class ItemInOrder {
@@ -19,8 +19,8 @@ export class ItemInOrder {
   @Column('integer')
   quantity: number;
 
-  @ManyToOne(() => Product, (product) => product.itemInOrder)
-  product: Product;
+  @ManyToOne(() => Variant, (variant) => variant.itemInOrder)
+  variant: Variant;
 
   @ManyToOne(() => Order, (order) => order.itemInOrder)
   order: Order;

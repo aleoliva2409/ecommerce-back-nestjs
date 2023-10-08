@@ -10,7 +10,6 @@ import {
 } from 'typeorm';
 
 import { Category } from '../../categories/entities/category.entity';
-import { ItemInOrder } from '../../orders/entities';
 import { Review } from '../../reviews/entities/review.entity';
 import { Variant } from './variant.entity';
 import { SizeType } from '../types/size-type.enum';
@@ -46,9 +45,6 @@ export class Product {
 
   @OneToMany(() => Review, (reviews) => reviews.product)
   reviews: Review[];
-
-  @OneToMany(() => ItemInOrder, (itemInOrder) => itemInOrder.product)
-  itemInOrder: ItemInOrder[];
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
