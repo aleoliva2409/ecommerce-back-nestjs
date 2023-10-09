@@ -23,16 +23,16 @@ export class Order {
   @Column('varchar', { default: 'preparacion' }) // es enum
   status: string;
 
-  @Column('decimal', { nullable: true })
+  @Column('decimal', { nullable: true, precision: 5, scale: 4 })
   tax?: number;
 
   @Column('date', { name: 'paid_at', nullable: true })
   paidAt?: Date;
 
-  @Column('decimal', { name: 'sub_total' })
+  @Column('decimal', { name: 'sub_total', precision: 10, scale: 2 })
   subTotal: number;
 
-  @Column('decimal')
+  @Column('decimal', { precision: 10, scale: 2 })
   total: number;
 
   @Column('integer', { name: 'total_items' })
