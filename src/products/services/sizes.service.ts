@@ -8,7 +8,7 @@ export class SizesService {
     @InjectRepository(Size) private readonly sizesRepository: Repository<Size>,
   ) {}
 
-  async getSizes(): Promise<Size[]> {
+  async findAll(): Promise<Size[]> {
     return await this.sizesRepository.find();
   }
 }

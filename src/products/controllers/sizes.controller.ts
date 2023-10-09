@@ -7,7 +7,7 @@ export class SizesController {
   constructor(private readonly sizesService: SizesService) {}
 
   @Get()
-  getSizes() {
-    return this.sizesService.getSizes();
+  findAll() {
+    return this.sizesService.findAll();
   }
 }

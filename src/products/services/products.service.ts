@@ -4,27 +4,33 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 import { CategoriesService } from 'src/categories/categories.service';
 import { validateError } from 'src/shared';
-import { Product, Variant } from '../entities';
+import { Product } from '../entities';
 import {
   CreateProductDto,
+  CreateReviewDto,
   CreateVariantDto,
   UpdateProductDto,
   UpdateVariantDto,
 } from '../dto';
+import { ReviewsService } from './reviews.service';
+import { VariantsService } from './variants.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private readonly productsRepository: Repository<Product>,
-    @InjectRepository(Variant) private readonly variantsRepository: Repository<Variant>,
     private readonly categoriesService: CategoriesService,
+    private readonly reviewsService: ReviewsService,
+    private readonly variantsService: VariantsService,
   ) {}
 
-  async createProduct(createProductDto: CreateProductDto): Promise<void> {
+  // *** PRODUCTS ***
+
+  async create(createProductDto: CreateProductDto): Promise<void> {
     try {
       const { variant, ...rest } = createProductDto;
 
-      //** pasamos category como "ANY" porque nos llega un ID
+      // ??? pasamos category como "ANY" porque nos llega un ID ???
       await this.categoriesService.findOne(createProductDto.category as any);
 
       const newProduct = this.productsRepository.create({ ...rest });
@@ -36,36 +42,30 @@ export class ProductsService {
     }
   }
 
-  async createVariant(
-    productId: number,
-    createVariantDto: CreateVariantDto,
-  ): Promise<void> {
-    try {
-      const product = await this.getProduct(productId);
-      const newVariant = this.variantsRepository.create({ ...createVariantDto, product });
-
-      await this.variantsRepository.save(newVariant);
-    } catch (error) {
-      validateError(error);
-    }
-  }
-
-  async getProducts(): Promise<Product[]> {
+  async findAll(): Promise<Product[]> {
     try {
       return await this.productsRepository.find({
-        relations: { variants: { size: true, color: true }, category: true },
         order: { id: 'asc' },
+        relations: {
+          category: true,
+          reviews: true,
+          variants: { size: true, color: true },
+        },
       });
     } catch (error) {
       validateError(error);
     }
   }
 
-  async getProduct(productId: number): Promise<Product> {
+  async findOne(productId: number): Promise<Product> {
     try {
       const product = await this.productsRepository.findOne({
         where: { id: productId },
-        relations: { variants: { size: true, color: true }, category: true },
+        relations: {
+          category: true,
+          reviews: true,
+          variants: { size: true, color: true },
+        },
       });
 
       if (!product) {
@@ -78,26 +78,24 @@ export class ProductsService {
     }
   }
 
-  async getVariant(variantId: number): Promise<Variant> {
+  async existProduct(id: number): Promise<void> {
     try {
-      const variant = await this.variantsRepository.findOneBy({ id: variantId });
+      const product = await this.productsRepository.findOneBy({ id });
 
-      if (!variant) {
-        throw new NotFoundException(`Variant ${variantId} not found`);
+      if (!product) {
+        throw new NotFoundException(`Cannot find product with id ${id}`);
       }
-
-      return variant;
     } catch (error) {
       validateError(error);
     }
   }
 
-  async updateProduct(
+  async update(
     productId: number,
     updateProductDto: UpdateProductDto,
   ): Promise<UpdateResult> {
     try {
-      await this.getProduct(productId);
+      await this.existProduct(productId);
       const { category } = updateProductDto;
 
       if (!!category) {
@@ -110,24 +108,9 @@ export class ProductsService {
     }
   }
 
-  async updateVariant(
-    productId: number,
-    variantId: number,
-    updateVariantDto: UpdateVariantDto,
-  ): Promise<UpdateResult> {
+  async remove(productId: number): Promise<DeleteResult> {
     try {
-      await this.getProduct(productId);
-      await this.getVariant(variantId);
-
-      return await this.variantsRepository.update(variantId, { ...updateVariantDto });
-    } catch (error) {
-      validateError(error);
-    }
-  }
-
-  async removeProduct(productId: number): Promise<DeleteResult> {
-    try {
-      await this.getProduct(productId);
+      await this.existProduct(productId);
 
       return await this.productsRepository.softDelete(productId);
     } catch (error) {
@@ -135,12 +118,62 @@ export class ProductsService {
     }
   }
 
+  // *** VARIANTS ***
+
+  async createVariant(
+    productId: number,
+    createVariantDto: CreateVariantDto,
+  ): Promise<void> {
+    try {
+      await this.existProduct(productId);
+
+      await this.variantsService.create(createVariantDto);
+    } catch (error) {
+      validateError(error);
+    }
+  }
+
+  async updateVariant(
+    productId: number,
+    variantId: number,
+    updateVariantDto: UpdateVariantDto,
+  ): Promise<UpdateResult> {
+    try {
+      await this.existProduct(productId);
+
+      return await this.variantsService.update(variantId, { ...updateVariantDto });
+    } catch (error) {
+      validateError(error);
+    }
+  }
+
   async removeVariant(productId: number, variantId: number): Promise<DeleteResult> {
     try {
-      await this.getProduct(productId);
-      await this.getVariant(variantId);
+      await this.existProduct(productId);
 
-      return await this.variantsRepository.softDelete(variantId);
+      return await this.variantsService.remove(variantId);
+    } catch (error) {
+      validateError(error);
+    }
+  }
+
+  // *** REVIEWS ***
+
+  async createReview(productId: number, createReviewDto: CreateReviewDto): Promise<void> {
+    try {
+      await this.existProduct(productId);
+
+      await this.reviewsService.create(createReviewDto);
+    } catch (error) {
+      validateError(error);
+    }
+  }
+
+  async removeReview(productId: number, reviewId: number): Promise<DeleteResult> {
+    try {
+      await this.existProduct(productId);
+
+      return await this.reviewsService.remove(reviewId);
     } catch (error) {
       validateError(error);
     }

@@ -18,21 +18,21 @@ export class ColorsController {
 
   @Get()
   findAll() {
-    return this.colorsService.getColors();
+    return this.colorsService.findAll();
   }
 
   @Post()
   create(@Body() createColorDto: CreateColorDto) {
-    return this.colorsService.createColor(createColorDto);
+    return this.colorsService.create(createColorDto);
   }
 
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() updateColorDto: UpdateColorDto) {
-    return this.colorsService.updateColor(id, updateColorDto);
+    return this.colorsService.update(id, updateColorDto);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
-    return this.colorsService.removeColor(id);
+    return this.colorsService.remove(id);
   }
 }

@@ -15,7 +15,7 @@ export class OrdersService {
     private readonly itemsInOrdersRepository: Repository<VariantInOrder>,
   ) {}
 
-  async createOrder(createOrderDto: CreateOrderDto): Promise<void> {
+  async create(createOrderDto: CreateOrderDto): Promise<void> {
     try {
       const { variants, ...rest } = createOrderDto;
       const order = this.ordersRepository.create({ ...rest });
@@ -36,15 +36,13 @@ export class OrdersService {
 
   async addVariantInOrder(addVariantInOrderDto: AddVariantInOrderDto): Promise<void> {
     try {
-      const variantInOrder = this.itemsInOrdersRepository.create(addVariantInOrderDto);
-
-      await this.itemsInOrdersRepository.save(variantInOrder);
+      await this.itemsInOrdersRepository.save(addVariantInOrderDto);
     } catch (error) {
       validateError(error);
     }
   }
 
-  async getOrders(): Promise<Order[]> {
+  async findAll(): Promise<Order[]> {
     try {
       return await this.ordersRepository.find({
         relations: {
@@ -57,7 +55,7 @@ export class OrdersService {
     }
   }
 
-  async getOrder(id: number): Promise<Order> {
+  async findOne(id: number): Promise<Order> {
     try {
       const order = await this.ordersRepository.findOne({
         where: { id },
@@ -76,9 +74,9 @@ export class OrdersService {
     }
   }
 
-  async updateOrder(id: number, updateOrderDto: UpdateOrderDto): Promise<UpdateResult> {
+  async update(id: number, updateOrderDto: UpdateOrderDto): Promise<UpdateResult> {
     try {
-      await this.getOrder(id);
+      await this.findOne(id);
 
       return await this.ordersRepository.update(id, { ...updateOrderDto });
     } catch (error) {
@@ -86,9 +84,9 @@ export class OrdersService {
     }
   }
 
-  async removeOrder(id: number): Promise<DeleteResult> {
+  async remove(id: number): Promise<DeleteResult> {
     try {
-      await this.getOrder(id);
+      await this.findOne(id);
 
       return await this.ordersRepository.softDelete(id);
     } catch (error) {

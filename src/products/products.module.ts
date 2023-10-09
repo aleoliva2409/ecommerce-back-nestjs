@@ -2,13 +2,28 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CategoriesModule } from 'src/categories/categories.module';
-import { Color, Product, Size, Variant } from './entities';
+import { Color, Product, Review, Size, Variant } from './entities';
 import { ColorsController, ProductsController, SizesController } from './controllers';
-import { ColorsService, ProductsService, SizesService } from './services';
+import {
+  ColorsService,
+  ProductsService,
+  ReviewsService,
+  SizesService,
+  VariantsService,
+} from './services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Color, Product, Size, Variant]), CategoriesModule],
-  controllers: [ProductsController, SizesController, ColorsController],
-  providers: [ProductsService, SizesService, ColorsService],
+  imports: [
+    TypeOrmModule.forFeature([Color, Product, Review, Size, Variant]),
+    CategoriesModule,
+  ],
+  controllers: [ColorsController, ProductsController, SizesController],
+  providers: [
+    ColorsService,
+    ProductsService,
+    ReviewsService,
+    SizesService,
+    VariantsService,
+  ],
 })
 export class ProductsModule {}

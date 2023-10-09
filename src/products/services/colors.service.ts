@@ -11,11 +11,11 @@ export class ColorsService {
     @InjectRepository(Color) private readonly colorsRepository: Repository<Color>,
   ) {}
 
-  async getColors(): Promise<Color[]> {
+  async findAll(): Promise<Color[]> {
     return await this.colorsRepository.find();
   }
 
-  async getColor(id: number): Promise<Color> {
+  async findOne(id: number): Promise<Color> {
     try {
       const color = await this.colorsRepository.findOneBy({ id });
 
@@ -29,7 +29,7 @@ export class ColorsService {
     }
   }
 
-  async createColor(createColorDto: CreateColorDto): Promise<void> {
+  async create(createColorDto: CreateColorDto): Promise<void> {
     try {
       const { name, code } = createColorDto;
 
@@ -44,9 +44,9 @@ export class ColorsService {
     }
   }
 
-  async updateColor(id: number, updateColorDto: UpdateColorDto): Promise<UpdateResult> {
+  async update(id: number, updateColorDto: UpdateColorDto): Promise<UpdateResult> {
     try {
-      await this.getColor(id);
+      await this.findOne(id);
       let colorToUpdate = {};
 
       if (updateColorDto.hasOwnProperty('name')) {
@@ -59,9 +59,9 @@ export class ColorsService {
     }
   }
 
-  async removeColor(id: number): Promise<DeleteResult> {
+  async remove(id: number): Promise<DeleteResult> {
     try {
-      await this.getColor(id);
+      await this.findOne(id);
 
       return await this.colorsRepository.delete(id);
     } catch (error) {
