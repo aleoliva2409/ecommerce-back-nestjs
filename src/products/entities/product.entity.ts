@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 import { Category } from '../../categories/entities/category.entity';
-import { Review } from '../../reviews/entities/review.entity';
+import { Review } from './review.entity';
 import { Variant } from './variant.entity';
 import { SizeType } from '../types/size-type.enum';
 
@@ -22,13 +22,13 @@ export class Product {
   @Column('varchar', { length: 100, unique: true })
   title: string;
 
-  @Column('text')
+  @Column('varchar', { length: 255 })
   description: string;
 
   @Column('varchar', { length: 30, nullable: true })
   brand?: string;
 
-  @Column('float', { default: 0 })
+  @Column('decimal', { nullable: false, precision: 10, scale: 2 })
   price: number;
 
   @Column('varchar', { length: 15, array: true, default: [] })

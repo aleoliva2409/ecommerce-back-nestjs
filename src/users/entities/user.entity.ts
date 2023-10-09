@@ -10,7 +10,7 @@ import {
 
 import { Roles } from '../types/roles.enum';
 import { Order } from '../../orders/entities/order.entity';
-import { Review } from '../../reviews/entities/review.entity';
+import { Review } from '../../products/entities';
 
 @Entity('users')
 export class User {

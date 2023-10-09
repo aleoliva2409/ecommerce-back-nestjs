@@ -8,7 +8,6 @@ import { CategoriesModule } from './categories/categories.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { OrdersModule } from './orders/orders.module';
 import { ProductsModule } from './products/products.module';
-import { ReviewsModule } from './reviews/reviews.module';
 import { UsersModule } from './users/users.module';
 import { SeedModule } from './seed/seed.module';
 
@@ -21,7 +20,6 @@ import { SeedModule } from './seed/seed.module';
     FavoritesModule,
     OrdersModule,
     ProductsModule,
-    ReviewsModule,
     UsersModule,
     SeedModule,
   ],

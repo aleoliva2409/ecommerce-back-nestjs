@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Product } from '../../products/entities/product.entity';
+import { Product } from './product.entity';
 import { User } from '../../users/entities/user.entity';
 
 @Entity('reviews')
@@ -17,14 +17,8 @@ export class Review {
   @Column('varchar', { length: 255 })
   content: string;
 
-  @Column('varchar', { length: 30 })
+  @Column('decimal')
   score: number;
-
-  @Column()
-  userId: number;
-
-  @Column()
-  productId: number;
 
   @ManyToOne(() => User, (user) => user.reviews)
   user: User;
