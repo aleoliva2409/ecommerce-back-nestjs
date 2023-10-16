@@ -7,7 +7,7 @@ export class SeedController {
 
   @Get('sizes')
   addSizes() {
-    return this.seedService.findAll();
+    return this.seedService.addSizes();
   }
 
   @Get('products')

@@ -11,4 +11,14 @@ export class SizesService {
   async findAll(): Promise<Size[]> {
     return await this.sizesRepository.find();
   }
+
+  async create(size): Promise<void> {
+    return await this.sizesRepository.save(size);
+  }
+
+  async deleteAllSizes() {
+    const query = this.sizesRepository.createQueryBuilder('size');
+
+    return await query.delete().where({}).execute();
+  }
 }

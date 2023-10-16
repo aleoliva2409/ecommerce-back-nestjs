@@ -25,5 +25,6 @@ import {
     SizesService,
     VariantsService,
   ],
+  exports: [SizesService],
 })
 export class ProductsModule {}

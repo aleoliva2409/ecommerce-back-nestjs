@@ -2,19 +2,22 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
+  IsEnum,
   IsNumber,
   IsObject,
   IsOptional,
   IsString,
   Min,
 } from 'class-validator';
+import { Status } from '../types/status.enum';
 
 export class CreateOrderDto {
   @IsBoolean()
   isPaid: boolean;
 
+  @IsEnum(Status)
   @IsString()
-  status: string;
+  status: Status;
 
   @IsNumber()
   @Min(0)

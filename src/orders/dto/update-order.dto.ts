@@ -1,13 +1,23 @@
-import { IsBoolean, IsDate, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
+import { Status } from '../types/status.enum';
 
 export class UpdateOrderDto {
   @IsBoolean()
   @IsOptional()
   isPaid?: boolean;
 
+  @IsEnum(Status)
   @IsString()
   @IsOptional()
-  status?: string;
+  status?: Status;
 
   @IsNumber()
   @Min(0)

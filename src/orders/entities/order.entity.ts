@@ -11,6 +11,7 @@ import {
 
 import { User } from '../../users/entities/user.entity';
 import { VariantInOrder } from './variant-in-order.entity';
+import { Status } from '../types/status.enum';
 
 @Entity('orders')
 export class Order {
@@ -20,8 +21,8 @@ export class Order {
   @Column('boolean', { default: false, name: 'is_paid' })
   isPaid: boolean;
 
-  @Column('varchar', { default: 'preparacion' }) // es enum
-  status: string;
+  @Column('enum', { enum: Status })
+  status: Status;
 
   @Column('decimal', { nullable: true, precision: 5, scale: 4 })
   tax?: number;
