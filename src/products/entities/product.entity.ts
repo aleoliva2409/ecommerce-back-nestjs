@@ -28,7 +28,15 @@ export class Product {
   @Column('varchar', { length: 30, nullable: true })
   brand?: string;
 
-  @Column('decimal', { nullable: false, precision: 10, scale: 2 })
+  @Column('decimal', {
+    nullable: false,
+    precision: 10,
+    scale: 2,
+    // transformer: {
+    //   to: (price: number) => Number(price),
+    //   from: (price: number) => Number(price),
+    // },
+  })
   price: number;
 
   @Column('varchar', { length: 15, array: true, default: [] })
