@@ -12,9 +12,9 @@ export class ReviewsService {
     @InjectRepository(Review) private readonly reviewsRepository: Repository<Review>,
   ) {}
 
-  async create(review: CreateReviewDto): Promise<void> {
+  async create(productId: number, review: CreateReviewDto): Promise<void> {
     try {
-      await this.reviewsRepository.save(review);
+      await this.reviewsRepository.save({ ...review, product: { id: productId } });
     } catch (error) {
       validateError(error);
     }
@@ -38,7 +38,7 @@ export class ReviewsService {
     try {
       await this.findOne(id);
 
-      return await this.reviewsRepository.softDelete(id);
+      return await this.reviewsRepository.delete(id);
     } catch (error) {
       validateError(error);
     }

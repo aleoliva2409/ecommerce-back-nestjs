@@ -65,7 +65,7 @@ export class OrdersService {
       });
 
       if (!order) {
-        throw new NotFoundException(`Order ${order.id} not found`);
+        throw new NotFoundException(`Order ${id} not found`);
       }
 
       return order;

@@ -1,13 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 
 import { SizesService } from '../services';
+import { SizeType } from '../types';
 
 @Controller('sizes')
 export class SizesController {
   constructor(private readonly sizesService: SizesService) {}
 
   @Get()
-  findAll() {
-    return this.sizesService.findAll();
+  findAll(@Query('type') type: SizeType) {
+    return this.sizesService.findAll(type);
   }
 }

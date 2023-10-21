@@ -1,11 +1,10 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class FirstMigration1697928317247 implements MigrationInterface {
-    name = 'FirstMigration1697928317247'
+export class FirstMigration1697931666623 implements MigrationInterface {
+    name = 'FirstMigration1697931666623'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE "favorites" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_890818d27523748dd36a4d1bdc8" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TYPE "public"."sizes_type_enum" AS ENUM('tipo 1', 'tipo 2', 'tipo 3', 'tipo 4')`);
+        await queryRunner.query(`CREATE TYPE "public"."sizes_type_enum" AS ENUM('tipo1', 'tipo2', 'tipo3', 'tipo4')`);
         await queryRunner.query(`CREATE TABLE "sizes" ("id" SERIAL NOT NULL, "name" character varying(5) NOT NULL, "type" "public"."sizes_type_enum" NOT NULL, "order" integer NOT NULL, CONSTRAINT "PK_09ffc681886e25eb5ce3b319fab" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "variants" ("id" SERIAL NOT NULL, "stock" integer NOT NULL, "images" text array NOT NULL DEFAULT '{}', "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "sizeId" integer, "colorId" integer, "productId" integer, CONSTRAINT "PK_672d13d1a6de0197f20c6babb5e" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "colors" ("id" SERIAL NOT NULL, "name" character varying(30) NOT NULL, "code" character varying(7) NOT NULL, CONSTRAINT "UQ_cf12321fa0b7b9539e89c7dfeb7" UNIQUE ("name"), CONSTRAINT "UQ_69fbcefcd7e013cc4abcbde2e43" UNIQUE ("code"), CONSTRAINT "PK_3a62edc12d29307872ab1777ced" PRIMARY KEY ("id"))`);
@@ -15,9 +14,10 @@ export class FirstMigration1697928317247 implements MigrationInterface {
         await queryRunner.query(`CREATE TYPE "public"."users_roles_enum" AS ENUM('admin', 'supervisor', 'client')`);
         await queryRunner.query(`CREATE TABLE "users" ("id" SERIAL NOT NULL, "fullName" character varying(40) NOT NULL, "email" character varying(40) NOT NULL, "password" character varying(150) NOT NULL, "is_active" boolean NOT NULL DEFAULT true, "roles" "public"."users_roles_enum" NOT NULL DEFAULT 'client', "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "reviews" ("id" SERIAL NOT NULL, "content" character varying(255) NOT NULL, "score" numeric(2,1) NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "userId" integer, "productId" integer, CONSTRAINT "PK_231ae565c273ee700b283f15c1d" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TYPE "public"."products_size_type_enum" AS ENUM('tipo 1', 'tipo 2', 'tipo 3', 'tipo 4')`);
+        await queryRunner.query(`CREATE TYPE "public"."products_size_type_enum" AS ENUM('tipo1', 'tipo2', 'tipo3', 'tipo4')`);
         await queryRunner.query(`CREATE TABLE "products" ("id" SERIAL NOT NULL, "title" character varying(100) NOT NULL, "description" character varying(255) NOT NULL, "brand" character varying(30), "price" numeric(10,2) NOT NULL, "tags" character varying(15) array NOT NULL DEFAULT '{}', "size_type" "public"."products_size_type_enum" NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "categoryId" integer, CONSTRAINT "UQ_c30f00a871de74c8e8c213acc4a" UNIQUE ("title"), CONSTRAINT "PK_0806c755e0aca124e67c0cf6d7d" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "categories" ("id" SERIAL NOT NULL, "name" character varying(20) NOT NULL, CONSTRAINT "PK_24dbc6126a28ff948da33e97d3b" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "favorites" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_890818d27523748dd36a4d1bdc8" PRIMARY KEY ("id"))`);
         await queryRunner.query(`ALTER TABLE "variants" ADD CONSTRAINT "FK_a87b8b3bf0a30377d53a7605c8a" FOREIGN KEY ("sizeId") REFERENCES "sizes"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "variants" ADD CONSTRAINT "FK_a37db4beeabddc64fc7142c0a67" FOREIGN KEY ("colorId") REFERENCES "colors"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "variants" ADD CONSTRAINT "FK_bdbfe33a28befefa9723c355036" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
@@ -39,6 +39,7 @@ export class FirstMigration1697928317247 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "variants" DROP CONSTRAINT "FK_bdbfe33a28befefa9723c355036"`);
         await queryRunner.query(`ALTER TABLE "variants" DROP CONSTRAINT "FK_a37db4beeabddc64fc7142c0a67"`);
         await queryRunner.query(`ALTER TABLE "variants" DROP CONSTRAINT "FK_a87b8b3bf0a30377d53a7605c8a"`);
+        await queryRunner.query(`DROP TABLE "favorites"`);
         await queryRunner.query(`DROP TABLE "categories"`);
         await queryRunner.query(`DROP TABLE "products"`);
         await queryRunner.query(`DROP TYPE "public"."products_size_type_enum"`);
@@ -52,7 +53,6 @@ export class FirstMigration1697928317247 implements MigrationInterface {
         await queryRunner.query(`DROP TABLE "variants"`);
         await queryRunner.query(`DROP TABLE "sizes"`);
         await queryRunner.query(`DROP TYPE "public"."sizes_type_enum"`);
-        await queryRunner.query(`DROP TABLE "favorites"`);
     }
 
 }

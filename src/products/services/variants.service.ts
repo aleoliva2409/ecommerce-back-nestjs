@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 import { validateError } from 'src/shared';
-import { Product, Variant } from '../entities';
+import { Variant } from '../entities';
 import { CreateVariantDto, UpdateVariantDto } from '../dto';
 
 @Injectable()
@@ -12,14 +12,11 @@ export class VariantsService {
     @InjectRepository(Variant) private readonly variantsRepository: Repository<Variant>,
   ) {}
 
-  async create(
-    productId: number | Product,
-    createVariantDto: CreateVariantDto,
-  ): Promise<void> {
+  async create(productId: number, createVariantDto: CreateVariantDto): Promise<void> {
     try {
       await this.variantsRepository.save({
         ...createVariantDto,
-        product: productId as Product,
+        product: { id: productId },
       });
     } catch (error) {
       validateError(error);

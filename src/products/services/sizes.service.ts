@@ -9,9 +9,9 @@ export class SizesService {
     @InjectRepository(Size) private readonly sizesRepository: Repository<Size>,
   ) {}
 
-  async findAll(): Promise<Size[]> {
+  async findAll(type: SizeType): Promise<Size[]> {
     return await this.sizesRepository.find({
-      where: { type: SizeType.tipo1 }, // TODO: add type
+      where: { type },
       order: { order: 'asc' },
     });
   }

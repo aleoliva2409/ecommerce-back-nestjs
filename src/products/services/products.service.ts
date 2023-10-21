@@ -163,7 +163,7 @@ export class ProductsService {
     try {
       await this.existProduct(productId);
 
-      await this.reviewsService.create(createReviewDto);
+      await this.reviewsService.create(productId, createReviewDto);
     } catch (error) {
       validateError(error);
     }
