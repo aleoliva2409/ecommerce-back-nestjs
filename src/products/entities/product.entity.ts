@@ -12,7 +12,7 @@ import {
 import { Category } from '../../categories/entities/category.entity';
 import { Review } from './review.entity';
 import { Variant } from './variant.entity';
-import { SizeType } from '../types/size-type.enum';
+import { SizeType } from '../types';
 
 @Entity('products')
 export class Product {

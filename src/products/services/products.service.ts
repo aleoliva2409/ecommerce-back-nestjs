@@ -127,7 +127,7 @@ export class ProductsService {
     try {
       await this.existProduct(productId);
 
-      await this.variantsService.create(createVariantDto);
+      await this.variantsService.create(productId, createVariantDto);
     } catch (error) {
       validateError(error);
     }

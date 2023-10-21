@@ -65,4 +65,10 @@ export class CategoriesService {
       validateError(error);
     }
   }
+
+  async deleteAllCategories() {
+    const query = this.categoriesRepository.createQueryBuilder('category');
+
+    return await query.delete().where({}).execute();
+  }
 }

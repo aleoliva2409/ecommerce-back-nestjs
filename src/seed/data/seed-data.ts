@@ -1,4 +1,4 @@
-import { SizeType } from 'src/products/types/size-type.enum';
+import { SizeType } from 'src/products/types';
 
 export const SizesData = [
   {
@@ -166,5 +166,17 @@ export const SizesData = [
     name: '58',
     type: SizeType.tipo4,
     order: 11,
+  },
+];
+
+export const CategoriesData = [
+  {
+    name: 'Pantalones',
+  },
+  {
+    name: 'Remeras',
+  },
+  {
+    name: 'Shorts',
   },
 ];

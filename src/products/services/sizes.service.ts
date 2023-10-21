@@ -2,6 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Size } from '../entities';
+import { ICreateSize, SizeType } from '../types';
 
 export class SizesService {
   constructor(
@@ -9,11 +10,14 @@ export class SizesService {
   ) {}
 
   async findAll(): Promise<Size[]> {
-    return await this.sizesRepository.find();
+    return await this.sizesRepository.find({
+      where: { type: SizeType.tipo1 }, // TODO: add type
+      order: { order: 'asc' },
+    });
   }
 
-  async create(size): Promise<void> {
-    return await this.sizesRepository.save(size);
+  async create(size: ICreateSize): Promise<void> {
+    await this.sizesRepository.save(size);
   }
 
   async deleteAllSizes() {

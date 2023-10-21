@@ -13,7 +13,7 @@ import {
 
 import { Category } from 'src/categories/entities/category.entity';
 import { CreateVariantDto } from './create-variant.dto';
-import { SizeType } from '../types/size-type.enum';
+import { SizeType } from '../types';
 
 export class CreateProductDto {
   @IsString()

@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-import { SizeType } from '../types/size-type.enum';
+import { SizeType } from '../types';
 import { Variant } from './variant.entity';
 
 @Entity('sizes')

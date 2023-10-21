@@ -22,7 +22,7 @@ export class Variant {
   @Column('integer')
   stock: number;
 
-  @Column('text', { array: true })
+  @Column('text', { array: true, default: [] })
   images?: string[] = [];
 
   @OneToMany(() => VariantInOrder, (variantInOrder) => variantInOrder.variant)

@@ -10,13 +10,8 @@ export class SeedController {
     return this.seedService.addSizes();
   }
 
-  @Get('products')
-  addProducts() {
-    return this.seedService.findAll();
-  }
-
   @Get('categories')
   addCategories() {
-    return this.seedService.findAll();
+    return this.seedService.addCategories();
   }
 }

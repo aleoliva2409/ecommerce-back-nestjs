@@ -1,22 +1,33 @@
 import { Injectable } from '@nestjs/common';
+
+import { CategoriesService } from 'src/categories/categories.service';
+import { CategoriesData, SizesData } from './data/seed-data';
 import { SizesService } from 'src/products/services';
-import { SizesData } from './data/seed-data';
 
 @Injectable()
 export class SeedService {
-  constructor(private readonly sizesService: SizesService) {}
+  constructor(
+    private readonly categoriesService: CategoriesService,
+    private readonly sizesService: SizesService,
+  ) {}
 
-  async addSizes() {
+  async addSizes(): Promise<string> {
     await this.sizesService.deleteAllSizes();
 
     SizesData.forEach(async (s) => {
       await this.sizesService.create(s);
     });
+
+    return 'sizes added successfully';
   }
 
-  //TODO: add categories
+  async addCategories(): Promise<string> {
+    await this.categoriesService.deleteAllCategories();
 
-  findAll() {
-    return `This action returns all seed`;
+    CategoriesData.forEach(async (c) => {
+      await this.categoriesService.create(c);
+    });
+
+    return 'categories added successfully';
   }
 }
