@@ -1,2 +1,2 @@
-export * from './capitalize';
-export * from './error-manager';
+export * from './guards';
+export * from './utils';

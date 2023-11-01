@@ -17,7 +17,7 @@ export class User {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column('varchar', { length: 40 })
+  @Column('varchar', { length: 40, name: 'full_name' })
   fullName: string;
 
   @Column('varchar', { length: 40, unique: true })
@@ -30,7 +30,7 @@ export class User {
   isActive: boolean;
 
   @Column('enum', { enum: Roles, default: Roles.client })
-  roles: Roles;
+  role: Roles;
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
