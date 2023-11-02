@@ -1,22 +1,64 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+
 import { CreateUserDto } from 'src/users/dto';
+import { UsersService } from 'src/users/users.service';
+import { IAuthResponse } from './types/auth.interface';
+import { LoginDto } from './dto/login.dto';
+import { validateError } from 'src/shared';
+import { compareSync } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  signUp(createUserDto: CreateUserDto) {
-    console.log(createUserDto);
-    return 'This action adds a new auth';
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  async register(createUserDto: CreateUserDto): Promise<IAuthResponse> {
+    try {
+      const user = await this.usersService.create(createUserDto);
+
+      const userCreated = { ...user };
+      delete userCreated.password;
+
+      return {
+        token: this.generateJwt(user.id),
+        user: userCreated,
+      };
+    } catch (error) {
+      validateError(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async login(loginDto: LoginDto): Promise<IAuthResponse> {
+    try {
+      const { email, password } = loginDto;
+      const user = await this.usersService.findOneWithFilters({
+        where: { email },
+        select: { password: true, id: true },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException('Credentials are not authorized');
+      }
+
+      if (!compareSync(password, user.password)) {
+        throw new UnauthorizedException('Credentials are not authorized');
+      }
+
+      const userCreated = await this.usersService.findOne(user.id);
+
+      return {
+        token: this.generateJwt(user.id),
+        user: userCreated,
+      };
+    } catch (error) {
+      validateError(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  private generateJwt(userId: number) {
+    return this.jwtService.sign({ id: userId });
   }
 }

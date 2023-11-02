@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { hashSync } from 'bcrypt';
 
 import { validateError } from 'src/shared';
@@ -13,7 +13,7 @@ export class UsersService {
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<void> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       const { password, ...userData } = createUserDto;
 
@@ -23,6 +23,8 @@ export class UsersService {
       });
 
       await this.usersRepository.save(user);
+
+      return user;
     } catch (error) {
       validateError(error);
     }
@@ -38,10 +40,24 @@ export class UsersService {
 
   async findOne(id: number): Promise<User> {
     try {
-      const user = this.usersRepository.findOneBy({ id });
+      const user = await this.usersRepository.findOneBy({ id });
 
       if (!user) {
         throw new NotFoundException(`User ${id} does not exist`);
+      }
+
+      return user;
+    } catch (error) {
+      validateError(error);
+    }
+  }
+
+  async findOneWithFilters(filters: FindOneOptions<User>): Promise<User> {
+    try {
+      const user = await this.usersRepository.findOne(filters);
+
+      if (!user) {
+        throw new NotFoundException(`User ${user.id} does not exist`);
       }
 
       return user;
