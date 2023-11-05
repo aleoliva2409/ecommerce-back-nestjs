@@ -32,7 +32,18 @@ export class UsersService {
 
   async findAll(): Promise<User[]> {
     try {
-      return await this.usersRepository.find();
+      return await this.usersRepository.find({ where: { isActive: true } });
+    } catch (error) {
+      validateError(error);
+    }
+  }
+
+  async findMe(user: User): Promise<User> {
+    try {
+      return await this.usersRepository.findOne({
+        where: { id: user.id },
+        relations: { orders: true },
+      });
     } catch (error) {
       validateError(error);
     }

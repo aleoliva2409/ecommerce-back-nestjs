@@ -1,12 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { compareSync } from 'bcrypt';
 
 import { CreateUserDto } from 'src/users/dto';
 import { UsersService } from 'src/users/users.service';
 import { IAuthResponse } from './types/auth.interface';
 import { LoginDto } from './dto/login.dto';
 import { validateError } from 'src/shared';
-import { compareSync } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
