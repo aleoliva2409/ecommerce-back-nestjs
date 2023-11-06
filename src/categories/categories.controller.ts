@@ -7,13 +7,15 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
-import { Auth } from 'src/shared';
+import { Auth, JwtAuthGuard, PublicAccess } from 'src/shared';
 import { Roles } from 'src/users/types/roles.enum';
 
+@UseGuards(JwtAuthGuard)
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
@@ -24,11 +26,13 @@ export class CategoriesController {
     return this.categoriesService.create(createCategoryDto);
   }
 
+  @PublicAccess()
   @Get()
   findAll() {
     return this.categoriesService.findAll();
   }
 
+  @PublicAccess()
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.categoriesService.findOne(id);
