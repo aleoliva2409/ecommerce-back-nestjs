@@ -5,17 +5,16 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
   ParseIntPipe,
 } from '@nestjs/common';
 
 import { UsersService } from './users.service';
-import { UpdateUserDto } from './dto';
-import { JwtAuthGuard, GetUser, RoleProtection } from 'src/shared';
+import { UpdateProfileDto, UpdateUserDto } from './dto';
+import { Auth, GetUser, RoleProtection } from 'src/shared';
 import { User } from './entities/user.entity';
 import { Roles } from './types/roles.enum';
 
-@UseGuards(JwtAuthGuard)
+@Auth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -26,7 +25,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @RoleProtection()
+  @RoleProtection(Roles.client)
   @Get('me')
   findMe(@GetUser() user: User) {
     return this.usersService.findMe(user);
@@ -34,8 +33,8 @@ export class UsersController {
 
   @RoleProtection(Roles.client)
   @Patch('me')
-  updateProfile(@GetUser() user: User, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(user.id, updateUserDto);
+  updateProfile(@GetUser() user: User, @Body() updateProfileDto: UpdateProfileDto) {
+    return this.usersService.update(user.id, updateProfileDto);
   }
 
   @RoleProtection(Roles.admin)

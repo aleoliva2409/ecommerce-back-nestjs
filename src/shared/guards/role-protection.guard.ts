@@ -1,6 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -17,8 +18,11 @@ export class RoleProtectionGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const rolesAllowed: Roles[] = this.reflector.get(ROLES_KEY, context.getHandler());
 
-    if (!rolesAllowed) return true;
-    if (rolesAllowed.length === 0) return true;
+    if (!rolesAllowed) throw new ForbiddenException("You aren't authorized to access");
+    if (rolesAllowed.length === 0)
+      throw new ForbiddenException("You aren't authorized to access");
+
+    if (rolesAllowed.includes(Roles.all)) return true;
 
     const req = context.switchToHttp().getRequest();
     const user = req.user as User;
@@ -26,7 +30,7 @@ export class RoleProtectionGuard implements CanActivate {
     if (!user) throw new UnauthorizedException('Your user is not authenticated');
 
     if (!rolesAllowed.includes(user.role)) {
-      throw new UnauthorizedException('You do not have permissions to access');
+      throw new ForbiddenException("You aren't authorized to access");
     }
 
     return true;

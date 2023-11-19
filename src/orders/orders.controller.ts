@@ -7,15 +7,14 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-  UseGuards,
 } from '@nestjs/common';
 
+import { Auth, RoleProtection } from 'src/shared';
+import { Roles } from 'src/users/types/roles.enum';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto, UpdateOrderDto } from './dto';
-import { JwtAuthGuard, RoleProtection } from 'src/shared';
-import { Roles } from 'src/users/types/roles.enum';
 
-@UseGuards(JwtAuthGuard)
+@Auth()
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
@@ -26,13 +25,13 @@ export class OrdersController {
     return this.ordersService.create(createOrderDto);
   }
 
-  @RoleProtection()
+  @RoleProtection(Roles.all)
   @Get()
   findAll() {
     return this.ordersService.findAll();
   }
 
-  @RoleProtection()
+  @RoleProtection(Roles.all)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.ordersService.findOne(id);

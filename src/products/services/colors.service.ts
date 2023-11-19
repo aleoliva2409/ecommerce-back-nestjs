@@ -47,13 +47,15 @@ export class ColorsService {
   async update(id: number, updateColorDto: UpdateColorDto): Promise<UpdateResult> {
     try {
       await this.findOne(id);
-      let colorToUpdate = {};
 
       if (updateColorDto.hasOwnProperty('name')) {
-        colorToUpdate = { ...updateColorDto, name: capitalize(updateColorDto.name) };
+        return await this.colorsRepository.update(id, {
+          ...updateColorDto,
+          name: capitalize(updateColorDto.name),
+        });
       }
 
-      return await this.colorsRepository.update(id, colorToUpdate);
+      return await this.colorsRepository.update(id, updateColorDto);
     } catch (error) {
       validateError(error);
     }

@@ -129,6 +129,8 @@ export class ProductsService {
 
       await this.variantsService.create(productId, createVariantDto);
     } catch (error) {
+      await this.existProduct(productId);
+      await this.productsRepository.delete(productId);
       validateError(error);
     }
   }

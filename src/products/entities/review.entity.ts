@@ -17,7 +17,14 @@ export class Review {
   @Column('varchar', { length: 255 })
   content: string;
 
-  @Column('decimal', { precision: 2, scale: 1 })
+  @Column('decimal', {
+    precision: 2,
+    scale: 1,
+    transformer: {
+      from: (price: number) => Number(price),
+      to: (price: number) => Number(price),
+    },
+  })
   score: number;
 
   @ManyToOne(() => User, (user) => user.reviews)

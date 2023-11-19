@@ -24,16 +24,39 @@ export class Order {
   @Column('enum', { enum: Status })
   status: Status;
 
-  @Column('decimal', { nullable: true, precision: 5, scale: 4 })
+  @Column('decimal', {
+    nullable: true,
+    precision: 5,
+    scale: 4,
+    transformer: {
+      from: (price: number) => Number(price),
+      to: (price: number) => Number(price),
+    },
+  })
   tax?: number;
 
   @Column('date', { name: 'paid_at', nullable: true })
   paidAt?: Date;
 
-  @Column('decimal', { name: 'sub_total', precision: 10, scale: 2 })
+  @Column('decimal', {
+    name: 'sub_total',
+    precision: 10,
+    scale: 2,
+    transformer: {
+      from: (price: number) => Number(price),
+      to: (price: number) => Number(price),
+    },
+  })
   subTotal: number;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('decimal', {
+    precision: 10,
+    scale: 2,
+    transformer: {
+      from: (price: number) => Number(price),
+      to: (price: number) => Number(price),
+    },
+  })
   total: number;
 
   @Column('integer', { name: 'total_items' })

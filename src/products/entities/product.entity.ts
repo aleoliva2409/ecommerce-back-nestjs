@@ -32,10 +32,10 @@ export class Product {
     nullable: false,
     precision: 10,
     scale: 2,
-    // transformer: {
-    //   to: (price: number) => Number(price),
-    //   from: (price: number) => Number(price),
-    // },
+    transformer: {
+      from: (price: number) => Number(price),
+      to: (price: number) => Number(price),
+    },
   })
   price: number;
 
