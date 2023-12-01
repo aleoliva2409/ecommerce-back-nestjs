@@ -17,7 +17,7 @@ import {
   UpdateProductDto,
   UpdateVariantDto,
 } from '../dto';
-import { Auth, PublicAccess, RoleProtection } from 'src/shared';
+import { Auth, GetUser, PublicAccess, RoleProtection } from 'src/shared';
 import { Roles } from 'src/users/types/roles.enum';
 
 @Auth()
@@ -90,9 +90,10 @@ export class ProductsController {
   @Post(':productId/reviews')
   createReview(
     @Param('productId', ParseIntPipe) productId: number,
+    @GetUser('id') userId: number,
     @Body() createReviewDto: CreateReviewDto,
   ) {
-    return this.productsService.createReview(productId, createReviewDto);
+    return this.productsService.createReview(productId, userId, createReviewDto);
   }
 
   @RoleProtection(Roles.admin)

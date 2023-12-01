@@ -12,9 +12,17 @@ export class ReviewsService {
     @InjectRepository(Review) private readonly reviewsRepository: Repository<Review>,
   ) {}
 
-  async create(productId: number, review: CreateReviewDto): Promise<void> {
+  async create(
+    productId: number,
+    userId: number,
+    review: CreateReviewDto,
+  ): Promise<void> {
     try {
-      await this.reviewsRepository.save({ ...review, product: { id: productId } });
+      await this.reviewsRepository.save({
+        ...review,
+        product: { id: productId },
+        user: { id: userId },
+      });
     } catch (error) {
       validateError(error);
     }

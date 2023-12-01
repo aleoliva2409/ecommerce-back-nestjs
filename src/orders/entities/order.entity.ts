@@ -62,7 +62,7 @@ export class Order {
   @Column('integer', { name: 'total_items' })
   totalItems: number;
 
-  @ManyToOne(() => User, (user) => user.orders)
+  @ManyToOne(() => User, (user) => user.orders, { nullable: false })
   user: User;
 
   @OneToMany(() => VariantInOrder, (variantInOrder) => variantInOrder.order)

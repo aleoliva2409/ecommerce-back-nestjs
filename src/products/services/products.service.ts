@@ -161,11 +161,15 @@ export class ProductsService {
 
   // *** REVIEWS ***
 
-  async createReview(productId: number, createReviewDto: CreateReviewDto): Promise<void> {
+  async createReview(
+    productId: number,
+    userId: number,
+    createReviewDto: CreateReviewDto,
+  ): Promise<void> {
     try {
       await this.existProduct(productId);
 
-      await this.reviewsService.create(productId, createReviewDto);
+      await this.reviewsService.create(productId, userId, createReviewDto);
     } catch (error) {
       validateError(error);
     }

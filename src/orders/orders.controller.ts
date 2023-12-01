@@ -9,7 +9,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 
-import { Auth, RoleProtection } from 'src/shared';
+import { Auth, GetUser, RoleProtection } from 'src/shared';
 import { Roles } from 'src/users/types/roles.enum';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto, UpdateOrderDto } from './dto';
@@ -21,8 +21,8 @@ export class OrdersController {
 
   @RoleProtection(Roles.client)
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
-    return this.ordersService.create(createOrderDto);
+  create(@Body() createOrderDto: CreateOrderDto, @GetUser('id') userId: number) {
+    return this.ordersService.create(createOrderDto, userId);
   }
 
   @RoleProtection(Roles.all)

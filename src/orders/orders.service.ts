@@ -15,17 +15,17 @@ export class OrdersService {
     private readonly itemsInOrdersRepository: Repository<VariantInOrder>,
   ) {}
 
-  async create(createOrderDto: CreateOrderDto): Promise<void> {
+  async create(createOrderDto: CreateOrderDto, userId: number): Promise<void> {
     try {
       const { variants, ...rest } = createOrderDto;
-      const order = this.ordersRepository.create({ ...rest });
+      const order = this.ordersRepository.create({ ...rest, user: { id: userId } });
 
       await this.ordersRepository.save(order);
 
       variants.forEach(async (variant: any) => {
         await this.addVariantInOrder({
+          order,
           variant: variant.id,
-          order: order,
           quantity: variant.quantity,
         });
       });

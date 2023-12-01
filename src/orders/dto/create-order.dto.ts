@@ -44,3 +44,9 @@ export class CreateOrderDto {
   @IsObject({ each: true }) //* revisa que cada posicion del array sea un objeto
   variants: any[];
 }
+
+// export class VariantInDto {
+//   id: number;
+
+//   quantity: number;
+// }
