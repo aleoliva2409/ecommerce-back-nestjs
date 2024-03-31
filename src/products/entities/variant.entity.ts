@@ -13,6 +13,7 @@ import { Product } from './product.entity';
 import { Size } from './size.entity';
 import { Color } from './color.entity';
 import { VariantInOrder } from '../../orders/entities';
+import { Image } from './image.entity';
 
 @Entity('variants')
 export class Variant {
@@ -22,11 +23,11 @@ export class Variant {
   @Column('integer')
   stock: number;
 
-  @Column('text', { array: true, default: [] })
-  images?: string[] = [];
-
   @OneToMany(() => VariantInOrder, (variantInOrder) => variantInOrder.variant)
   variantInOrder: VariantInOrder[];
+
+  @OneToMany(() => Image, (image) => image.variant)
+  images: Image[];
 
   @ManyToOne(() => Size, (size) => size.variants)
   size: Size;

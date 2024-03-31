@@ -104,4 +104,15 @@ export class ProductsController {
   ) {
     return this.productsService.removeReview(productId, reviewsId);
   }
+
+  //TODO: AGREGAR ENDPOINT Y SERVICIO
+  @RoleProtection(Roles.admin)
+  @Post(':productId/image')
+  uploadImage(
+    @Param('productId', ParseIntPipe) productId: number,
+    @GetUser('id') userId: number,
+    @Body() createReviewDto: CreateReviewDto,
+  ) {
+    return this.productsService.createReview(productId, userId, createReviewDto);
+  }
 }

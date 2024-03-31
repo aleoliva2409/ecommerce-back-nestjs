@@ -15,6 +15,4 @@ export class CreateVariantDto {
   @IsNumber()
   @IsOptional()
   color?: Color = null;
-
-  // images: string[];
 }

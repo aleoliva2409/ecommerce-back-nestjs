@@ -39,6 +39,9 @@ export class Product {
   })
   price: number;
 
+  @Column('varchar', { length: 150 })
+  imageUrl?: string;
+
   @Column('varchar', { length: 15, array: true, default: [] })
   tags?: string[];
 
