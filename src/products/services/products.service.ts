@@ -14,12 +14,17 @@ import {
 } from '../dto';
 import { ReviewsService } from './reviews.service';
 import { VariantsService } from './variants.service';
+import { ImagesService } from './images.service';
+import { CloudinaryService } from './cloudinary.service';
+import { MulterFile } from '../types';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private readonly productsRepository: Repository<Product>,
     private readonly categoriesService: CategoriesService,
+    private readonly imagesService: ImagesService,
+    private readonly cloudinaryService: CloudinaryService,
     private readonly reviewsService: ReviewsService,
     private readonly variantsService: VariantsService,
   ) {}
@@ -180,6 +185,26 @@ export class ProductsService {
       await this.existProduct(productId);
 
       return await this.reviewsService.remove(reviewId);
+    } catch (error) {
+      validateError(error);
+    }
+  }
+
+  // *** IMAGES ***
+  async uploadImage(
+    productId: number,
+    variantId: number,
+    file: MulterFile,
+  ): Promise<void> {
+    try {
+      await this.existProduct(productId);
+
+      const { secure_url, public_id } = await this.cloudinaryService.uploadImage(file);
+
+      //? obtenemos el ID de la imagen en cloudinary
+      const cloudinaryId = public_id.split('/')[1];
+
+      await this.imagesService.saveImage(variantId, secure_url, cloudinaryId);
     } catch (error) {
       validateError(error);
     }

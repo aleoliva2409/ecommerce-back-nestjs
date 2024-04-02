@@ -39,7 +39,7 @@ export class Product {
   })
   price: number;
 
-  @Column('varchar', { length: 150 })
+  @Column('varchar', { length: 150, nullable: true })
   imageUrl?: string;
 
   @Column('varchar', { length: 15, array: true, default: [] })

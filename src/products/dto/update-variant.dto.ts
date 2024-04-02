@@ -15,7 +15,4 @@ export class UpdateVariantDto {
   @IsNumber()
   @IsOptional()
   color?: Color;
-
-  //TODO: agregar imagenes
-  // images: string[];
 }

@@ -7,7 +7,10 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ProductsService } from '../services';
 import {
@@ -19,6 +22,8 @@ import {
 } from '../dto';
 import { Auth, GetUser, PublicAccess, RoleProtection } from 'src/shared';
 import { Roles } from 'src/users/types/roles.enum';
+import { MulterFile } from '../types';
+import { fileFilterInterceptor } from '../helpers/fileFilter.helper';
 
 @Auth()
 @Controller('products')
@@ -86,6 +91,17 @@ export class ProductsController {
     return this.productsService.removeVariant(productId, variantId);
   }
 
+  @RoleProtection(Roles.admin)
+  @UseInterceptors(FileInterceptor('file', { fileFilter: fileFilterInterceptor }))
+  @Post(':productId/variants/:variantId/upload-image')
+  uploadImage(
+    @Param('productId', ParseIntPipe) productId: number,
+    @Param('variantId', ParseIntPipe) variantId: number,
+    @UploadedFile() file: MulterFile,
+  ) {
+    return this.productsService.uploadImage(productId, variantId, file);
+  }
+
   @RoleProtection(Roles.client)
   @Post(':productId/reviews')
   createReview(
@@ -103,16 +119,5 @@ export class ProductsController {
     @Param('reviewsId', ParseIntPipe) reviewsId: number,
   ) {
     return this.productsService.removeReview(productId, reviewsId);
-  }
-
-  //TODO: AGREGAR ENDPOINT Y SERVICIO
-  @RoleProtection(Roles.admin)
-  @Post(':productId/image')
-  uploadImage(
-    @Param('productId', ParseIntPipe) productId: number,
-    @GetUser('id') userId: number,
-    @Body() createReviewDto: CreateReviewDto,
-  ) {
-    return this.productsService.createReview(productId, userId, createReviewDto);
   }
 }

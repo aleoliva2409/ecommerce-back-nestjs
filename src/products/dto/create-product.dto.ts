@@ -31,6 +31,10 @@ export class CreateProductDto {
   @IsOptional()
   brand?: string = null;
 
+  @IsString()
+  @IsOptional()
+  imageUrl?: string = null;
+
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()

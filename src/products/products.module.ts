@@ -2,10 +2,12 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CategoriesModule } from 'src/categories/categories.module';
-import { Color, Product, Review, Size, Variant } from './entities';
+import { Color, Image, Product, Review, Size, Variant } from './entities';
 import { ColorsController, ProductsController, SizesController } from './controllers';
 import {
+  CloudinaryService,
   ColorsService,
+  ImagesService,
   ProductsService,
   ReviewsService,
   SizesService,
@@ -14,12 +16,14 @@ import {
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Color, Product, Review, Size, Variant]),
+    TypeOrmModule.forFeature([Color, Image, Product, Review, Size, Variant]),
     CategoriesModule,
   ],
   controllers: [ColorsController, ProductsController, SizesController],
   providers: [
+    CloudinaryService,
     ColorsService,
+    ImagesService,
     ProductsService,
     ReviewsService,
     SizesService,

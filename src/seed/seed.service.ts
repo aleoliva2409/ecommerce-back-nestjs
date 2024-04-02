@@ -12,22 +12,17 @@ export class SeedService {
   ) {}
 
   async addSizes(): Promise<string> {
+    await this.categoriesService.deleteAllCategories();
     await this.sizesService.deleteAllSizes();
 
     SizesData.forEach(async (s) => {
       await this.sizesService.create(s);
     });
 
-    return 'sizes added successfully';
-  }
-
-  async addCategories(): Promise<string> {
-    await this.categoriesService.deleteAllCategories();
-
     CategoriesData.forEach(async (c) => {
       await this.categoriesService.create(c);
     });
 
-    return 'categories added successfully';
+    return 'seed added successfully';
   }
 }

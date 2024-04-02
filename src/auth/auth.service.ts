@@ -19,6 +19,8 @@ export class AuthService {
     try {
       const user = await this.usersService.create(createUserDto);
 
+      //TODO: mejorar logica, enviar un ...rest
+      //TODO: agregar el modulo addresses o shippingAddress
       const userCreated = { ...user };
       delete userCreated.password;
 

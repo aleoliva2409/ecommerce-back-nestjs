@@ -21,7 +21,7 @@ export class UsersService {
         where: { email: userData.email },
       });
 
-      if (userInDb.email) {
+      if (userInDb?.email) {
         throw new BadRequestException(`User ${userData.email} already exists`);
       }
 
@@ -74,10 +74,6 @@ export class UsersService {
   async findOneWithFilters(filters: FindOneOptions<User>): Promise<User> {
     try {
       const user = await this.usersRepository.findOne(filters);
-
-      if (!user) {
-        throw new NotFoundException(`User ${user.id} does not exist`);
-      }
 
       return user;
     } catch (error) {
